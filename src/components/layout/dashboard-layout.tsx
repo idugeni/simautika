@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { FiMenu } from 'react-icons/fi';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { FiMenu, FiHome, FiUsers, FiFileText, FiBarChart2, FiSettings, FiSearch, FiBell, FiUser } from 'react-icons/fi';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { DialogTitle } from '@radix-ui/react-dialog';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -15,81 +17,183 @@ interface DashboardLayoutProps {
 
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   const [open, setOpen] = useState(false);
-  const isMobile = useIsMobile();
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768 && open) {
+        setOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [open]);
 
   return (
-    <div className="relative flex min-h-screen flex-col">
+    <div className="relative w-full flex min-h-screen flex-col bg-background">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto max-w-7xl flex h-12 md:h-14 items-center px-4 md:px-6">
-          <div className="mr-4 hidden md:flex">
-            <a className="mr-6 flex items-center space-x-2" href="/">
-              <span className="font-bold text-base md:text-lg">Admin Dashboard</span>
-            </a>
+        <div className="flex h-12 md:h-14 items-center px-0">
+          <div className="hidden md:flex md:w-[220px] md:items-center md:justify-center md:border-r md:px-4">
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="font-bold text-base md:text-lg text-foreground">SIMAUTIKA</span>
+            </Link>
           </div>
-          <div className="flex flex-1 items-center justify-between md:justify-end space-x-2">
-            <span className="md:hidden font-bold text-base">Admin Dashboard</span>
-            <ThemeToggle />
-          </div>
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
-              >
-                <FiMenu className="h-5 w-5" />
-                <span className="sr-only">Toggle Menu</span>
+          <div className="flex flex-1 items-center justify-between px-4">
+            <div className="flex items-center space-x-2 md:hidden">
+              <Sheet open={open} onOpenChange={setOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                  >
+                    <FiMenu className="h-5 w-5" />
+                    <span className="sr-only">Toggle Menu</span>
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="pr-0 w-[240px]">
+                  <DialogTitle className="px-2 py-4 flex items-center space-x-2">
+                    <span className="font-bold text-lg">SIMAUTIKA</span>
+                  </DialogTitle>
+                  <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10">
+                    <div className="flex flex-col space-y-2">
+                      <Link
+                        href="/dashboard"
+                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                      >
+                        <FiHome className="h-4 w-4" />
+                        <span>Dashboard</span>
+                      </Link>
+                      <Link
+                        href="/dashboard/users"
+                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                      >
+                        <FiUsers className="h-4 w-4" />
+                        <span>Pengguna</span>
+                      </Link>
+                      <Link
+                        href="/dashboard/documents"
+                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                      >
+                        <FiFileText className="h-4 w-4" />
+                        <span>Dokumen</span>
+                      </Link>
+                      <Link
+                        href="/dashboard/reports"
+                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                      >
+                        <FiBarChart2 className="h-4 w-4" />
+                        <span>Laporan</span>
+                      </Link>
+                      <Link
+                        href="/dashboard/settings"
+                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
+                      >
+                        <FiSettings className="h-4 w-4" />
+                        <span>Pengaturan</span>
+                      </Link>
+                    </div>
+                  </ScrollArea>
+                </SheetContent>
+              </Sheet>
+              <Link href="/" className="flex items-center space-x-2">
+                <span className="font-bold text-base text-foreground">SIMAUTIKA</span>
+              </Link>
+            </div>
+            <div className="flex-1 md:flex-grow max-w-sm md:max-w-2xl mx-auto hidden md:block">
+              <div className="relative">
+                <FiSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Cari..."
+                  className="w-full pl-8"
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-end space-x-2 md:space-x-4">
+              <Button variant="ghost" size="icon" className="relative">
+                <FiBell className="h-5 w-5" />
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 text-xs flex items-center justify-center">3</Badge>
               </Button>
-            </SheetTrigger>
-            <SheetContent side="left" className="pr-0 w-[240px]">
-              <ScrollArea className="my-4 h-[calc(100vh-8rem)] pb-10">
-                <div className="flex flex-col space-y-2">
-                  <a
-                    href="/dashboard"
-                    className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
-                  >
-                    Dashboard
-                  </a>
-                  <a
-                    href="/users"
-                    className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
-                  >
-                    Users
-                  </a>
-                  {/* Add more menu items here */}
-                </div>
-              </ScrollArea>
-            </SheetContent>
-          </Sheet>
+              <Button variant="ghost" size="icon">
+                <FiUser className="h-5 w-5" />
+              </Button>
+              <ThemeToggle />
+            </div>
+          </div>
         </div>
       </header>
       <div className="flex-1">
         <div className="grid grid-cols-1 md:grid-cols-[220px_1fr]">
-          <aside className="hidden border-r bg-background md:block">
+          <aside className="hidden border-r border-border bg-card md:block">
             <ScrollArea className="h-[calc(100vh-3.5rem)]">
               <div className="space-y-4 py-4">
                 <div className="px-3 py-2">
                   <div className="space-y-1">
-                    <a
+                    <Link
                       href="/dashboard"
                       className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
                     >
-                      Dashboard
-                    </a>
-                    <a
-                      href="/users"
+                      <FiHome className="h-4 w-4" />
+                      <span>Dashboard</span>
+                    </Link>
+                    <Link
+                      href="/dashboard/users"
                       className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
                     >
-                      Users
-                    </a>
-                    {/* Add more menu items here */}
+                      <FiUsers className="h-4 w-4" />
+                      <span>Pengguna</span>
+                    </Link>
+                    <Link
+                      href="/dashboard/documents"
+                      className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
+                    >
+                      <FiFileText className="h-4 w-4" />
+                      <span>Dokumen</span>
+                    </Link>
+                    <Link
+                      href="/dashboard/reports"
+                      className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
+                    >
+                      <FiBarChart2 className="h-4 w-4" />
+                      <span>Laporan</span>
+                    </Link>
+                    <Link
+                      href="/dashboard/settings"
+                      className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
+                    >
+                      <FiSettings className="h-4 w-4" />
+                      <span>Pengaturan</span>
+                    </Link>
                   </div>
                 </div>
               </div>
             </ScrollArea>
           </aside>
-          <main className="flex-1 p-4 md:p-6">{children}</main>
+          <main className="flex-1 p-4 md:p-6">
+            <div className="flex items-center text-sm text-muted-foreground mb-4">
+              <Link href="/dashboard" className="hover:text-foreground">
+                Dashboard
+              </Link>
+              <span className="mx-2">/</span>
+              <span className="text-foreground font-medium">Halaman Saat Ini</span>
+            </div>
+            {children}
+          </main>
         </div>
       </div>
+      <footer className="border-t bg-card">
+        <div className="px-4 md:px-6 flex flex-col md:flex-row items-center justify-between py-4 md:h-14 space-y-2 md:space-y-0">
+          <p className="text-sm text-muted-foreground">
+            © 2024 Simautika. Hak Cipta Dilindungi.
+          </p>
+          <nav className="flex items-center space-x-4 text-sm text-muted-foreground">
+            <Link href="/about" className="hover:underline">Tentang</Link>
+            <Link href="/privacy" className="hover:underline">Privasi</Link>
+            <Link href="/terms" className="hover:underline">Ketentuan</Link>
+            <Link href="/contact" className="hover:underline">Kontak</Link>
+          </nav>
+        </div>
+      </footer>
     </div>
   );
 }
