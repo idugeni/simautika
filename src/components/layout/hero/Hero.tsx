@@ -12,7 +12,8 @@ export function Hero() {
           Simautika<br />Otomatisasi Pengisian Jurnal
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-muted-foreground px-2 md:px-0">
-          Aplikasi otomatisasi pengisian jurnal untuk Kementerian Imigrasi & Pemasyarakatan yang mengoptimalkan efisiensi dan keamanan data pegawai.
+        Platform otomatisasi pengisian jurnal untuk Kementerian Imigrasi & Pemasyarakatan
+        yang mengoptimalkan efisiensi dan keamanan data pegawai.
         </p>
       </div>
       <div className="flex w-full flex-col sm:flex-row items-center justify-center space-y-3 sm:space-y-0 sm:space-x-4 py-4 md:pb-10">

@@ -1,6 +1,6 @@
 {
   "name": "simautika",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "Simautika adalah aplikasi otomatisasi pengisian jurnal untuk Kementerian Imigrasi & Pemasyarakatan yang mengoptimalkan efisiensi dan keamanan data pegawai.",
   "repository": {
     "type": "git",
@@ -8,7 +8,7 @@
   },
   "author": {
     "name": "Eliyanto Sarage",
-    "email": "admin@idugeni.id"
+    "email": "admin@oldsoul.id"
   },
   "keywords": [
     "simautika",
@@ -61,7 +61,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
     "date-fns": "^4.1.0",
-    "embla-carousel-react": "^8.5.2",
+    "embla-carousel-react": "^8.6.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.487.0",
     "next": "15.2.4",
@@ -74,7 +74,6 @@
     "react-resizable-panels": "^2.1.7",
     "recharts": "^2.15.2",
     "sonner": "^2.0.3",
-    "sweetalert2": "^11.17.2",
     "tailwind-merge": "^3.1.0",
     "tw-animate-css": "^1.2.5",
     "vaul": "^1.1.2",
@@ -87,7 +86,7 @@
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "electron": "^35.1.3",
+    "electron": "^35.1.4",
     "eslint": "^9",
     "eslint-config-next": "15.2.4",
     "prisma": "^6.5.0",

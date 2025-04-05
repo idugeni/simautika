@@ -2,13 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { FiMenu, FiHome, FiUsers, FiFileText, FiBarChart2, FiSettings, FiSearch, FiBell, FiUser } from 'react-icons/fi';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { FiMenu, FiHome, FiUsers, FiFileText, FiBarChart2, FiSettings, FiBell, FiUser } from 'react-icons/fi';
+import { ThemeToggle } from '@/components/shared/theme/ThemeToggle';
 import { DialogTitle } from '@radix-ui/react-dialog';
 
 interface DashboardLayoutProps {
@@ -35,6 +35,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         <div className="flex h-12 md:h-14 items-center px-0">
           <div className="hidden md:flex md:w-[220px] md:items-center md:justify-center md:border-r md:px-4">
             <Link href="/" className="flex items-center space-x-2">
+              <Image src="/logo.png" alt="Simautika Logo" className="h-6 w-6" width={24} height={24} />
               <span className="font-bold text-base md:text-lg text-foreground">SIMAUTIKA</span>
             </Link>
           </div>
@@ -96,19 +97,11 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                 </SheetContent>
               </Sheet>
               <Link href="/" className="flex items-center space-x-2">
+                <Image src="/logo.png" alt="Simautika Logo" className="h-5 w-5" width={20} height={20} />
                 <span className="font-bold text-base text-foreground">SIMAUTIKA</span>
               </Link>
             </div>
-            <div className="flex-1 md:flex-grow max-w-sm md:max-w-2xl mx-auto hidden md:block">
-              <div className="relative">
-                <FiSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="search"
-                  placeholder="Cari..."
-                  className="w-full pl-8"
-                />
-              </div>
-            </div>
+            <div className="flex-1"></div>
             <div className="flex items-center justify-end space-x-2 md:space-x-4">
               <Button variant="ghost" size="icon" className="relative">
                 <FiBell className="h-5 w-5" />

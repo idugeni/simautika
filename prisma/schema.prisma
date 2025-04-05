@@ -9,13 +9,14 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(uuid())
-  nip            String   @unique
-  name           String
+  id         String   @id @default(uuid())
+  nip        String   @unique
+  password   String
+  name       String
   pangkatGolongan String
-  jabatan        String
-  unitBagian     String
-  role           String
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  jabatan    String
+  unitBagian String
+  role       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

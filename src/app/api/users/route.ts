@@ -1,16 +1,14 @@
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 import { PANGKAT_GOLONGAN_OPTIONS, JABATAN_OPTIONS, UNIT_BAGIAN_OPTIONS, ROLE_OPTIONS } from '@/lib/constants';
-
-const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { nip, name, pangkatGolongan, jabatan, unitBagian, role } = body;
+    const { nip, password, name, pangkatGolongan, jabatan, unitBagian, role } = body;
 
     // Validasi data yang diperlukan
-    if (!nip || !name || !pangkatGolongan || !jabatan || !unitBagian || !role) {
+    if (!nip || !password || !name || !pangkatGolongan || !jabatan || !unitBagian || !role) {
       return NextResponse.json(
         { error: 'Semua field harus diisi' },
         { status: 400 }
@@ -61,6 +59,7 @@ export async function POST(request: Request) {
     const newUser = await prisma.user.create({
       data: {
         nip,
+        password,
         name,
         pangkatGolongan,
         jabatan,

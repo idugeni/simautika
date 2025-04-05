@@ -11,7 +11,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { User } from '@/types/user';
-import { createColumns } from '@/components/users/columns';
+import { createColumns } from '@/components/features/users/Columns';
 
 export function useUsersTable(data: User[], onDelete: (id: string) => void) {
   if (!Array.isArray(data)) {

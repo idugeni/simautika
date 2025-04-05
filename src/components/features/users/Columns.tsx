@@ -3,7 +3,7 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { Button } from '@/components/ui/button';
 import { User } from '@/types/user';
-import { UserFormDialog } from './user-form-dialog';
+import { UserFormNew } from './UserFormNew';
 
 export const createColumns = (onDelete: (id: string) => void): ColumnDef<User>[] => [
   {
@@ -52,7 +52,7 @@ export const createColumns = (onDelete: (id: string) => void): ColumnDef<User>[]
 
       return (
         <div className="flex items-center gap-2">
-          <UserFormDialog
+          <UserFormNew
             mode="edit"
             user={row.original}
             onSubmit={(values) => {

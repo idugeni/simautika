@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { UsersTable } from '@/components/users/users-table';
+import { UsersTable } from '@/components/features/users/UsersTable';
 import { FiUsers, FiUserCheck, FiUserX } from 'react-icons/fi';
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
+import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { User } from '@/types/user';
-import { UserFormDialog } from '@/components/users/user-form-dialog';
+import { UserFormNew } from '@/components/features/users/UserFormNew';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -77,7 +77,7 @@ export default function UsersPage() {
       <div className="flex-1 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-bold tracking-tight">Manajemen Pengguna</h2>
-          <UserFormDialog
+          <UserFormNew
             mode="add"
             onSubmit={handleSubmit}
           />

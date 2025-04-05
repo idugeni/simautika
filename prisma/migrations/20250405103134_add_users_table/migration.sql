@@ -2,9 +2,9 @@
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "nip" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "pangkat" TEXT NOT NULL,
-    "golongan" TEXT NOT NULL,
+    "pangkatGolongan" TEXT NOT NULL,
     "jabatan" TEXT NOT NULL,
     "unitBagian" TEXT NOT NULL,
     "role" TEXT NOT NULL,
