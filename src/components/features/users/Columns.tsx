@@ -1,9 +1,8 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import { Button } from '@/components/ui/button';
 import { User } from '@/types/user';
-import { UserFormNew } from './UserFormNew';
+import { TableActions } from './TableActions';
 
 export const createColumns = (onDelete: (id: string) => void): ColumnDef<User>[] => [
   {
@@ -39,36 +38,7 @@ export const createColumns = (onDelete: (id: string) => void): ColumnDef<User>[]
     id: 'actions',
     header: 'Aksi',
     cell: ({ row }) => {
-      const handleDelete = () => {
-        try {
-          if (!row.original?.id) {
-            throw new Error('ID pengguna tidak valid');
-          }
-          onDelete(row.original.id);
-        } catch (error) {
-          console.error('Error saat menghapus pengguna:', error);
-        }
-      };
-
-      return (
-        <div className="flex items-center gap-2">
-          <UserFormNew
-            mode="edit"
-            user={row.original}
-            onSubmit={(values) => {
-              console.log('Edit user:', values);
-              // Implement edit logic here
-            }}
-          />
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={handleDelete}
-          >
-            Hapus
-          </Button>
-        </div>
-      );
+      return <TableActions user={row.original} onDelete={onDelete} />;
     },
   },
 ];

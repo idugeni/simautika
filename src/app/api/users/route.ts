@@ -1,6 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { PANGKAT_GOLONGAN_OPTIONS, JABATAN_OPTIONS, UNIT_BAGIAN_OPTIONS, ROLE_OPTIONS } from '@/lib/constants';
+import bcrypt from 'bcryptjs';
+
+// Fungsi untuk mendekripsi password
+async function decryptPassword(hashedPassword: string): Promise<string> {
+  // Dalam implementasi nyata, Anda mungkin ingin menggunakan metode yang lebih aman
+  // Untuk saat ini, kita hanya mengembalikan hash-nya sebagai placeholder
+  return hashedPassword;
+}
 
 export async function POST(request: Request) {
   try {
@@ -56,10 +64,14 @@ export async function POST(request: Request) {
       );
     }
 
+    // Hash password sebelum disimpan
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
     const newUser = await prisma.user.create({
       data: {
         nip,
-        password,
+        password: hashedPassword,
         name,
         pangkatGolongan,
         jabatan,
@@ -68,7 +80,13 @@ export async function POST(request: Request) {
       }
     });
 
-    return NextResponse.json(newUser, { status: 201 });
+    // Kembalikan response tanpa password hash
+    const userResponse = {
+      ...newUser,
+      password: password // Kembalikan password yang diinput untuk ditampilkan di frontend
+    };
+
+    return NextResponse.json(userResponse, { status: 201 });
   } catch (error) {
     console.error('Error creating user:', error);
     return NextResponse.json(
@@ -80,11 +98,49 @@ export async function POST(request: Request) {
 
 export async function GET() {
   try {
-    const users = await prisma.user.findMany();
-    return NextResponse.json(users);
-  } catch {
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        nip: true,
+        password: true,
+        name: true,
+        pangkatGolongan: true,
+        jabatan: true,
+        unitBagian: true,
+        role: true
+      }
+    });
+
+    if (!users) {
+      return NextResponse.json(
+        { error: 'Tidak ada data pengguna ditemukan' },
+        { status: 404 }
+      );
+    }
+    
+    interface DatabaseUser {
+      id: string;
+      nip: string;
+      password: string;
+      name: string;
+      pangkatGolongan: string;
+      jabatan: string;
+      unitBagian: string;
+      role: string;
+    }
+
+    const usersWithDecryptedPassword = await Promise.all(
+      users.map(async (user: DatabaseUser) => ({
+        ...user,
+        password: await decryptPassword(user.password)
+      }))
+    );
+    
+    return NextResponse.json(usersWithDecryptedPassword);
+  } catch (error) {
+    console.error('Error fetching users:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch users' },
+      { error: 'Gagal mengambil data pengguna' },
       { status: 500 }
     );
   }

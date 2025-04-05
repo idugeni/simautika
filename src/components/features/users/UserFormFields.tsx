@@ -24,16 +24,15 @@ import {
   ROLE_OPTIONS,
 } from '@/lib/constants';
 import { UserFormValues } from '@/types/users/schema';
-import { HiEye, HiEyeSlash } from 'react-icons/hi2';
-import { useState } from 'react';
+import { Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 interface UserFormFieldsProps {
   form: UseFormReturn<UserFormValues>;
 }
 
 export function UserFormFields({ form }: UserFormFieldsProps) {
-  const [showPassword, setShowPassword] = useState(false);
-
+  const [showPassword, setShowPassword] = React.useState(false);
   return (
     <div className="grid grid-cols-2 gap-4">
       <FormField
@@ -60,19 +59,26 @@ export function UserFormFields({ form }: UserFormFieldsProps) {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Masukkan password"
+                  className="pr-10"
                   {...field}
                 />
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                  tabIndex={-1}
                 >
                   {showPassword ? (
-                    <HiEyeSlash className="h-5 w-5" />
+                    <EyeOff className="h-4 w-4" aria-hidden="true" />
                   ) : (
-                    <HiEye className="h-5 w-5" />
+                    <Eye className="h-4 w-4" aria-hidden="true" />
                   )}
-                </button>
+                  <span className="sr-only">
+                    {showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                  </span>
+                </Button>
               </div>
             </FormControl>
             <FormMessage />

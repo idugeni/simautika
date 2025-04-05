@@ -41,6 +41,7 @@ export function UserFormNew({
   const [showSuccessDialog, setShowSuccessDialog] = React.useState(false);
   const [showErrorDialog, setShowErrorDialog] = React.useState(false);
   const [formValues, setFormValues] = React.useState<UserFormValues | null>(null);
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
@@ -64,6 +65,8 @@ export function UserFormNew({
     if (!formValues) return;
 
     try {
+      setIsSubmitting(true);
+      // Kirim data dengan password asli untuk ditampilkan di frontend
       await onSubmit(formValues);
       setOpen(false);
       form.reset();
@@ -76,6 +79,8 @@ export function UserFormNew({
     } catch {
       setShowConfirmDialog(false);
       setShowErrorDialog(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -108,8 +113,15 @@ export function UserFormNew({
             <form onSubmit={form.handleSubmit(handleSubmit)}>
               <UserFormFields form={form} />
               <DialogFooter className="mt-4">
-                <Button type="submit">
-                  {mode === 'add' ? 'Tambah' : 'Simpan'}
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-b-transparent"></span>
+                      {mode === 'add' ? 'Menambahkan...' : 'Menyimpan...'}
+                    </>
+                  ) : (
+                    mode === 'add' ? 'Tambah' : 'Simpan'
+                  )}
                 </Button>
               </DialogFooter>
             </form>

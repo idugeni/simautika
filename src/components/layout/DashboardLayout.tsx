@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { Toaster } from 'sonner';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -187,6 +188,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </nav>
         </div>
       </footer>
+      <Toaster richColors position="top-right" />
     </div>
   );
 }

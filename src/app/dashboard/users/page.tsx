@@ -7,6 +7,7 @@ import { FiUsers, FiUserCheck, FiUserX } from 'react-icons/fi';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { User } from '@/types/user';
 import { UserFormNew } from '@/components/features/users/UserFormNew';
+import { toast } from 'sonner';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,7 +17,10 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       const response = await fetch('/api/users');
-      if (!response.ok) throw new Error('Failed to fetch users');
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Gagal mengambil data pengguna');
+      }
       const data = await response.json();
       setUsers(data);
       
@@ -27,6 +31,7 @@ export default function UsersPage() {
       setInactiveUsers(data.length - active);
     } catch (error) {
       console.error('Error fetching users:', error);
+      toast.error(error instanceof Error ? error.message : 'Gagal mengambil data pengguna');
     }
   };
 
