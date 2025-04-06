@@ -18,10 +18,12 @@ import { Textarea } from '@/components/ui/textarea';
 
 interface SKPFormProps {
   userId: string;
-  onSubmit: (values: SKPFormValues) => Promise<void>;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+  onSubmit?: (values: SKPFormValues) => Promise<void>;
 }
 
-export function SKPForm({ userId, onSubmit }: SKPFormProps) {
+export function SKPForm({ userId, onSubmit, onSuccess, onCancel }: SKPFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const form = useForm<SKPFormValues>({
@@ -47,8 +49,11 @@ export function SKPForm({ userId, onSubmit }: SKPFormProps) {
   const handleSubmit = async (values: SKPFormValues) => {
     try {
       setIsSubmitting(true);
-      await onSubmit(values);
-      form.reset();
+      if (onSubmit) {
+        await onSubmit(values);
+        form.reset();
+        onSuccess?.();
+      }
     } catch (error) {
       console.error('Error submitting SKP:', error);
     } finally {
@@ -191,7 +196,14 @@ export function SKPForm({ userId, onSubmit }: SKPFormProps) {
           />
         </div>
 
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-3">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => onCancel?.()}
+          >
+            Batal
+          </Button>
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? (
               <>

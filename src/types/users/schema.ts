@@ -1,5 +1,3 @@
-'use client';
-
 import * as z from 'zod';
 import { PANGKAT_GOLONGAN_OPTIONS, JABATAN_OPTIONS, UNIT_BAGIAN_OPTIONS, ROLE_OPTIONS } from '@/lib/constants';
 
