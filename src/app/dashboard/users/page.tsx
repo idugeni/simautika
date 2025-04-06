@@ -21,11 +21,16 @@ export default function UsersPage() {
     setError(null);
     try {
       const response = await fetch('/api/users');
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Gagal mengambil data pengguna');
-      }
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Gagal mengambil data pengguna');
+      }
+
+      if (!Array.isArray(data)) {
+        throw new Error('Format data tidak valid');
+      }
+
       setUsers(data);
       
       // Update statistics
@@ -38,6 +43,11 @@ export default function UsersPage() {
       const errorMessage = error instanceof Error ? error.message : 'Gagal mengambil data pengguna';
       setError(errorMessage);
       toast.error(errorMessage);
+      // Reset data states when error occurs
+      setUsers([]);
+      setTotalUsers(0);
+      setActiveUsers(0);
+      setInactiveUsers(0);
     } finally {
       setIsLoading(false);
     }

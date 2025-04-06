@@ -8,6 +8,13 @@ import { Button } from '@/components/ui/button';
 import { userFormSchema, UserFormValues } from '@/types/users/schema';
 import { UserFormFields } from './UserFormFields';
 import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface AddUserFormProps {
   onSubmit: (values: UserFormValues) => Promise<void>;
@@ -15,6 +22,7 @@ interface AddUserFormProps {
 
 export function AddUserForm({ onSubmit }: AddUserFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const form = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
@@ -34,6 +42,7 @@ export function AddUserForm({ onSubmit }: AddUserFormProps) {
       setIsSubmitting(true);
       await onSubmit(values);
       form.reset();
+      setIsOpen(false);
       toast.success('User berhasil ditambahkan');
     } catch {
       toast.error('Gagal menambahkan user');
@@ -43,25 +52,35 @@ export function AddUserForm({ onSubmit }: AddUserFormProps) {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
-        <div className="bg-card rounded-lg border p-4">
-          <h2 className="text-lg font-semibold mb-4">Tambah User Baru</h2>
-          <UserFormFields form={form} />
-        </div>
-        <div className="flex justify-end">
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-b-transparent"></span>
-                Menambahkan...
-              </>
-            ) : (
-              'Tambah User'
-            )}
-          </Button>
-        </div>
-      </form>
-    </Form>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button>Tambah User</Button>
+      </DialogTrigger>
+      <DialogContent aria-describedby="dialog-description">
+        <DialogHeader>
+          <DialogTitle>Tambah User Baru</DialogTitle>
+        </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            <UserFormFields form={form} />
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" type="button" onClick={() => setIsOpen(false)}>
+                Batal
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-b-transparent"></span>
+                    Menambahkan...
+                  </>
+                ) : (
+                  'Simpan'
+                )}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
   );
 }

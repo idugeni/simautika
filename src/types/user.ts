@@ -13,6 +13,7 @@ type Role = typeof ROLE_OPTIONS[number];
 export interface User {
   id: string;
   nip: string;
+  password: string;
   name: string;
   pangkatGolongan: PangkatGolongan;
   jabatan: Jabatan;

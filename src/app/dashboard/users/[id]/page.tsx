@@ -6,17 +6,21 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card } from '@/components/ui/card';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { User } from '@/types/user';
+import { UserFormValues } from '@/types/users/schema';
 import { EditUserForm } from '@/components/features/users/EditUserForm';
-import { SKPForm } from '@/components/features/users/SKPForm';
-import { JournalForm } from '@/components/features/users/JournalForm';
+import { SKPForm } from '@/components/features/users/skp/SKPForm';
+import { JournalForm } from '@/components/features/users/journal/JournalForm';
 import { toast } from 'sonner';
 
 export default function UserEditPage() {
   const params = useParams();
-  const userId = params.id as string;
+  const userId = params?.id as string;
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!userId) return;
+
     const fetchData = async () => {
       try {
         const response = await fetch(`/api/users/${userId}`);
@@ -28,21 +32,19 @@ export default function UserEditPage() {
       } catch (error) {
         console.error('Error fetching user:', error);
         toast.error('Gagal mengambil data pengguna');
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-    
-
   }, [userId]);
 
-  const handleSubmit = async (data: Omit<User, 'id'>) => {
+  const handleSubmit = async (data: Partial<UserFormValues>) => {
     try {
       const response = await fetch(`/api/users/${userId}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
 
@@ -58,11 +60,21 @@ export default function UserEditPage() {
     }
   };
 
-  if (!user) {
+  if (loading) {
     return (
       <DashboardLayout>
         <div className="flex items-center justify-center h-full">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      </DashboardLayout>
+    );
+  }
+
+  if (!user) {
+    return (
+      <DashboardLayout>
+        <div className="text-center mt-10 text-red-500 font-semibold">
+          Data pengguna tidak ditemukan
         </div>
       </DashboardLayout>
     );
@@ -84,35 +96,24 @@ export default function UserEditPage() {
 
           <TabsContent value="info" className="space-y-4">
             <Card className="p-6">
-              <EditUserForm
-                user={user}
-                onSubmit={handleSubmit}
-              />
+              <EditUserForm user={user} onSubmit={handleSubmit} />
             </Card>
           </TabsContent>
 
           <TabsContent value="skp" className="space-y-4">
             <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Sasaran Kerja Pegawai Negeri Sipil (SKP)</h3>
               <SKPForm
                 userId={userId}
                 onSubmit={async (values) => {
                   try {
                     const response = await fetch(`/api/users/${userId}/skp`, {
                       method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
+                      headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify(values),
                     });
-
-                    if (!response.ok) {
-                      throw new Error('Gagal menyimpan SKP');
-                    }
-
+                    if (!response.ok) throw new Error();
                     toast.success('SKP berhasil disimpan');
-                  } catch (error) {
-                    console.error('Error saving SKP:', error);
+                  } catch {
                     toast.error('Gagal menyimpan SKP');
                   }
                 }}
@@ -122,26 +123,18 @@ export default function UserEditPage() {
 
           <TabsContent value="journal" className="space-y-4">
             <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Jurnal Harian</h3>
               <JournalForm
                 userId={userId}
                 onSubmit={async (values) => {
                   try {
                     const response = await fetch(`/api/users/${userId}/journal`, {
                       method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
+                      headers: { 'Content-Type': 'application/json' },
                       body: JSON.stringify(values),
                     });
-
-                    if (!response.ok) {
-                      throw new Error('Gagal menyimpan jurnal');
-                    }
-
+                    if (!response.ok) throw new Error();
                     toast.success('Jurnal berhasil disimpan');
-                  } catch (error) {
-                    console.error('Error saving journal:', error);
+                  } catch {
                     toast.error('Gagal menyimpan jurnal');
                   }
                 }}

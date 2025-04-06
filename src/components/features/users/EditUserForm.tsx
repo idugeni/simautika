@@ -9,7 +9,6 @@ import { userFormSchema, UserFormValues } from '@/types/users/schema';
 import { UserFormFields } from './UserFormFields';
 import { toast } from 'sonner';
 import { User } from '@/types/user';
-import * as z from 'zod';
 
 type EditUserFormValues = Omit<UserFormValues, 'password'> & { password?: string };
 
@@ -44,7 +43,7 @@ export function EditUserForm({ user, onSubmit }: EditUserFormProps) {
       setIsSubmitting(true);
       // Jika password kosong, hapus dari values sebelum submit
       if (!values.password) {
-        const { password, ...dataWithoutPassword } = values;
+        const { ...dataWithoutPassword } = values;
         await onSubmit(dataWithoutPassword as UserFormValues);
       } else {
         await onSubmit(values);
