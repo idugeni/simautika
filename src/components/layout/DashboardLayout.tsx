@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
-import { FiMenu, FiHome, FiUsers, FiFileText, FiBarChart2, FiSettings, FiBell, FiUser } from 'react-icons/fi';
+import { FiMenu, FiHome, FiUsers, FiBell, FiUser } from 'react-icons/fi';
 import { ThemeToggle } from '@/components/shared/theme/ThemeToggle';
 import { DialogTitle } from '@radix-ui/react-dialog';
 
@@ -72,27 +72,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                         <FiUsers className="h-4 w-4" />
                         <span>Pengguna</span>
                       </Link>
-                      <Link
-                        href="/dashboard/documents"
-                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
-                      >
-                        <FiFileText className="h-4 w-4" />
-                        <span>Dokumen</span>
-                      </Link>
-                      <Link
-                        href="/dashboard/reports"
-                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
-                      >
-                        <FiBarChart2 className="h-4 w-4" />
-                        <span>Laporan</span>
-                      </Link>
-                      <Link
-                        href="/dashboard/settings"
-                        className="flex items-center space-x-2 rounded-lg px-3 py-2.5 text-sm font-medium hover:bg-accent active:bg-accent"
-                      >
-                        <FiSettings className="h-4 w-4" />
-                        <span>Pengaturan</span>
-                      </Link>
+
                     </div>
                   </ScrollArea>
                 </SheetContent>
@@ -137,27 +117,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
                       <FiUsers className="h-4 w-4" />
                       <span>Pengguna</span>
                     </Link>
-                    <Link
-                      href="/dashboard/documents"
-                      className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
-                    >
-                      <FiFileText className="h-4 w-4" />
-                      <span>Dokumen</span>
-                    </Link>
-                    <Link
-                      href="/dashboard/reports"
-                      className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
-                    >
-                      <FiBarChart2 className="h-4 w-4" />
-                      <span>Laporan</span>
-                    </Link>
-                    <Link
-                      href="/dashboard/settings"
-                      className="flex items-center space-x-2 rounded-lg px-3 py-2 text-sm font-medium hover:bg-accent"
-                    >
-                      <FiSettings className="h-4 w-4" />
-                      <span>Pengaturan</span>
-                    </Link>
+
                   </div>
                 </div>
               </div>

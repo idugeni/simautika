@@ -6,7 +6,7 @@ import { UsersTable } from '@/components/features/users/UsersTable';
 import { FiUsers, FiUserCheck, FiUserX } from 'react-icons/fi';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { User } from '@/types/user';
-import { UserFormNew } from '@/components/features/users/UserFormNew';
+import { AddUserForm } from '@/components/features/users/AddUserForm';
 import { toast } from 'sonner';
 
 export default function UsersPage() {
@@ -14,7 +14,11 @@ export default function UsersPage() {
   const [totalUsers, setTotalUsers] = useState(0);
   const [activeUsers, setActiveUsers] = useState(0);
   const [inactiveUsers, setInactiveUsers] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const fetchUsers = async () => {
+    setIsLoading(true);
+    setError(null);
     try {
       const response = await fetch('/api/users');
       if (!response.ok) {
@@ -31,7 +35,11 @@ export default function UsersPage() {
       setInactiveUsers(data.length - active);
     } catch (error) {
       console.error('Error fetching users:', error);
-      toast.error(error instanceof Error ? error.message : 'Gagal mengambil data pengguna');
+      const errorMessage = error instanceof Error ? error.message : 'Gagal mengambil data pengguna';
+      setError(errorMessage);
+      toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -82,8 +90,7 @@ export default function UsersPage() {
       <div className="flex-1 space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-bold tracking-tight">Manajemen Pengguna</h2>
-          <UserFormNew
-            mode="add"
+          <AddUserForm
             onSubmit={handleSubmit}
           />
         </div>
@@ -118,7 +125,17 @@ export default function UsersPage() {
           </Card>
         </div>
 
-        <UsersTable data={users} onDelete={handleDelete} />
+        {isLoading ? (
+          <div className="flex items-center justify-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <div className="bg-destructive/10 text-destructive px-4 py-2 rounded-md">
+            {error}
+          </div>
+        ) : (
+          <UsersTable data={users} onDelete={handleDelete} />
+        )}
       </div>
     </DashboardLayout>
   );

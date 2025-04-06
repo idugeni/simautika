@@ -17,6 +17,62 @@ model User {
   jabatan    String
   unitBagian String
   role       String
+  journals   Journal[]
+  skps       SKP[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Journal {
+  id             String   @id @default(uuid())
+  tanggal        DateTime
+  waktuMulai     String
+  waktuSelesai   String
+  uraianKegiatan String
+  hasil          String
+  volumeOutput   Int
+  satuanOutput   String
+  buktiDokumen   String?
+  keterangan     String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model SKP {
+  id                String   @id @default(uuid())
+  tahun             String
+  periode           String
+  kinerjaUtama     KinerjaUtama[]
+  perilakuKerja    PerilakuKerja?
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model KinerjaUtama {
+  id           String   @id @default(uuid())
+  uraian       String
+  kuantitas    Int
+  output       String
+  kualitas     Int
+  waktu        Int
+  satuanWaktu  String
+  biaya        Float?
+  skpId        String
+  skp          SKP      @relation(fields: [skpId], references: [id], onDelete: Cascade)
+}
+
+model PerilakuKerja {
+  id                 String   @id @default(uuid())
+  orientasiPelayanan Int
+  integritas         Int
+  komitmen           Int
+  disiplin           Int
+  kerjasama          Int
+  kepemimpinan       Int
+  skpId              String   @unique
+  skp                SKP      @relation(fields: [skpId], references: [id], onDelete: Cascade)
 }

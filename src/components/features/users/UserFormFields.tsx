@@ -27,11 +27,11 @@ import { UserFormValues } from '@/types/users/schema';
 import { Eye, EyeOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-interface UserFormFieldsProps {
-  form: UseFormReturn<UserFormValues>;
+interface UserFormFieldsProps<T extends UserFormValues> {
+  form: UseFormReturn<T>;
 }
 
-export function UserFormFields({ form }: UserFormFieldsProps) {
+export function UserFormFields<T extends UserFormValues>({ form }: UserFormFieldsProps<T>) {
   const [showPassword, setShowPassword] = React.useState(false);
   return (
     <div className="grid grid-cols-2 gap-4">

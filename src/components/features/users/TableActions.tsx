@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { User } from '@/types/user';
-import { UserFormNew } from './UserFormNew';
 import { DeleteUserDialog } from './DeleteUserDialog';
+import Link from 'next/link';
 
 interface TableActionsProps {
   user: User;
@@ -28,14 +28,14 @@ export function TableActions({ user, onDelete }: TableActionsProps) {
 
   return (
     <div className="flex items-center gap-2">
-      <UserFormNew
-        mode="edit"
-        user={user}
-        onSubmit={(values) => {
-          console.log('Edit user:', values);
-          // Implement edit logic here
-        }}
-      />
+      <Link href={`/dashboard/users/${user.id}`}>
+        <Button
+          variant="outline"
+          size="sm"
+        >
+          Edit
+        </Button>
+      </Link>
       <>
         <Button
           variant="destructive"
